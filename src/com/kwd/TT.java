@@ -82,7 +82,7 @@ public class TT {
     }
 
     private static void printNewPersonalBest() {
-        System.out.println(ANSI_CYAN + ">>>>You have set up new personal best!<<<<" + ANSI_RESET);
+        System.out.println(ANSI_CYAN + ">>>> New personal best! Celebration time! <<<<" + ANSI_RESET);
     }
 
     private static void printEncouragement() {
