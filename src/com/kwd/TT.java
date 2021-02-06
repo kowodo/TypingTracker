@@ -15,26 +15,6 @@ public class TT {
     static float averageWPMAllTime = -1;
     static float averageWPMLast7Days = -1;
     static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy>MM>dd>HH:mm:ss");
-    static final int CATEGORY_STRING_MAX_LENGTH = -20;
-    static final int ERROR_RATE_DIGITS = 6;
-    static final int WPM_DIGITS = 7;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
     public static void main(String[] args) throws IOException {
         File recordsFile = TT.getRecordFile();
@@ -78,19 +58,19 @@ public class TT {
     }
 
     private static void printAboveAverageAllTime() {
-        System.out.println(ANSI_GREEN + "Better than all time average!" + ANSI_RESET);
+        System.out.println(Constants.ANSI_GREEN + "Better than all time average!" + Constants.ANSI_RESET);
     }
 
     private static void printAboveAveragePast7Days() {
-        System.out.println(ANSI_GREEN + "Better than average for last 7 days! " + ANSI_RESET);
+        System.out.println(Constants.ANSI_GREEN + "Better than average for last 7 days! " + Constants.ANSI_RESET);
     }
 
     private static void printTiedPersonalBest() {
-        System.out.println(ANSI_CYAN + "You have TIED your personal best!!!" + ANSI_RESET);
+        System.out.println(Constants.ANSI_CYAN + "You have TIED your personal best!!!" + Constants.ANSI_RESET);
     }
 
     private static void printNewPersonalBest() {
-        System.out.println(ANSI_CYAN + ">>>> New personal best! Celebration time! <<<<" + ANSI_RESET);
+        System.out.println(Constants.ANSI_CYAN + ">>>> New personal best! Celebration time! <<<<" + Constants.ANSI_RESET);
     }
 
     private static void printEncouragement() {
@@ -99,19 +79,19 @@ public class TT {
 
     private static void printAverage() {
         String average = "Average";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm\n"
+        System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
                 , average, averageErrorRateAllTime, averageWPMAllTime);
     }
 
     private static void printBest() {
         String personalBest = "Personal best";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm  %s\n"
+        System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm  %s\n"
                 , personalBest, bestErrorRate, bestWPM, bestTimeString);
     }
 
     private static void printAverageLast7Days() {
         String average7days = "Average last 7 days";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm\n"
+        System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
                 , average7days, averageErrorRateLast7Days, averageWPMLast7Days);
     }
 
@@ -172,7 +152,7 @@ public class TT {
         fileWriter.write(System.lineSeparator());
 
         String saving = "saving   ------->";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm  %s\n"
+        System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm  %s\n"
                 , saving, errorRate, wpm, timeString);
         fileWriter.close();
     }
