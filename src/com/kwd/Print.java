@@ -21,6 +21,11 @@ public class Print {
         System.out.println("Stick with it and you will get better!");
     }
 
+    static void printStatistics(){
+        printAverage();
+        printAverageLast7Days();
+        printBest();
+    }
     static void printAverage() {
         String average = "Average";
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
