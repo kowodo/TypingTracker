@@ -5,54 +5,105 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TT {
+    static float currentErrorRate = 0;
+    static float currentWPM = 0;
     static float bestErrorRate = Float.MAX_VALUE;
     static float bestWPM = Float.MAX_VALUE;
     static String bestTimeString = "If you can read this.... you are too close to error. Hint: This should not happen";
-    static float averageErrorRate = -1f;
+    static float averageErrorRateAllTime = -1f;
     static float averageErrorRateLast7Days = -1f;
-    static float averageWPM = -1;
+    static float averageWPMAllTime = -1;
     static float averageWPMLast7Days = -1;
     static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy>MM>dd>HH:mm:ss");
     static final int CATEGORY_STRING_MAX_LENGTH = -20;
     static final int ERROR_RATE_DIGITS = 6;
     static final int WPM_DIGITS = 7;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) throws IOException {
-        float errorRate = 0;
-        float wpm = 0;
         File recordsFile = TT.getRecordFile();
 
         if (args.length < 2) {
             System.out.println("To add record provide parameters: \n  error Rate (float), wpm (float), date yyyy>MM>dd>HH:mm:ss [optional]");
             parseRecordsFile(recordsFile);
         } else if (args.length == 2) {
-            errorRate = Float.parseFloat(args[0]);
-            wpm = Float.parseFloat(args[1]);
-            writeRecordToFile(errorRate, wpm, recordsFile, dateTimeFormatter);
+            currentErrorRate = Float.parseFloat(args[0]);
+            currentWPM = Float.parseFloat(args[1]);
             parseRecordsFile(recordsFile);
+            writeRecordToFile(currentErrorRate, currentWPM, recordsFile, dateTimeFormatter);
         } else if (args.length >= 3) {
             System.err.println("3 or more input parameters not yet supported");
         }
         printAverage();
         printAverageLast7Days();
         printBest();
+        evaluate();
+    }
+
+    private static void evaluate() {
+        // test
+        if (currentErrorRate > averageErrorRateAllTime) {
+            printEncouragement();
+        }
+        if (currentErrorRate < averageErrorRateAllTime ||
+                currentErrorRate == averageErrorRateAllTime && currentWPM < averageWPMAllTime) {
+            printAboveAverageAllTime();
+        }
+        if (currentErrorRate < averageErrorRateLast7Days ||
+                currentErrorRate == averageErrorRateLast7Days && currentWPM < averageWPMLast7Days) {
+            printAboveAveragePast7Days();
+        }
+        if (currentErrorRate == bestErrorRate && currentWPM == bestWPM) {
+            printTiedPersonalBest();
+        }
+        if (currentErrorRate < bestErrorRate || currentErrorRate == bestErrorRate && currentWPM < bestWPM) {
+            printNewPersonalBest();
+        }
+    }
+
+    private static void printAboveAverageAllTime() {
+        System.out.println(ANSI_GREEN + "Better than all time average!" + ANSI_RESET);
+    }
+
+    private static void printAboveAveragePast7Days() {
+        System.out.println(ANSI_GREEN + "Better than average for last 7 days! " + ANSI_RESET);
+    }
+
+    private static void printTiedPersonalBest() {
+        System.out.println(ANSI_CYAN + "You have TIED your personal best!!!" + ANSI_RESET);
+    }
+
+    private static void printNewPersonalBest() {
+        System.out.println(ANSI_CYAN + ">>>>You have set up new personal best!<<<<" + ANSI_RESET);
+    }
+
+    private static void printEncouragement() {
+        System.out.println("Stick with it and you will get better!");
     }
 
     private static void printAverage() {
         String average = "Average";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"+ERROR_RATE_DIGITS+".2f%% %"+WPM_DIGITS+".2fwpm\n"
-                , average, averageErrorRate, averageWPM);
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm\n"
+                , average, averageErrorRateAllTime, averageWPMAllTime);
     }
 
     private static void printBest() {
         String personalBest = "Personal best";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"+ERROR_RATE_DIGITS+".2f%% %"+WPM_DIGITS+".2fwpm  %s\n"
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm  %s\n"
                 , personalBest, bestErrorRate, bestWPM, bestTimeString);
     }
 
     private static void printAverageLast7Days() {
         String average7days = "Average last 7 days";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"+ERROR_RATE_DIGITS+".2f%% %"+WPM_DIGITS+".2fwpm\n"
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm\n"
                 , average7days, averageErrorRateLast7Days, averageWPMLast7Days);
     }
 
@@ -93,10 +144,11 @@ public class TT {
                 bestTimeString = split[2];
             }
         }
-        averageErrorRate = sumErrorRate / numberOfRecords;
-        averageWPM = sumWPM / numberOfRecords;
+        averageErrorRateAllTime = sumErrorRate / numberOfRecords;
+        averageWPMAllTime = sumWPM / numberOfRecords;
         averageErrorRateLast7Days = sumErrorRateLast7Days / numberOfRecordsLast7Days;
         averageWPMLast7Days = sumWPMLast7Days / numberOfRecordsLast7Days;
+        bufferedReader.close();
     }
 
     private static void writeRecordToFile(float errorRate, float wpm, File recordsFile, DateTimeFormatter dateTimeFormatter) throws IOException {
@@ -112,7 +164,7 @@ public class TT {
         fileWriter.write(System.lineSeparator());
 
         String saving = "saving   ------->";
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"+ERROR_RATE_DIGITS+".2f%% %"+WPM_DIGITS+".2fwpm  %s\n"
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%" + ERROR_RATE_DIGITS + ".2f%% %" + WPM_DIGITS + ".2fwpm  %s\n"
                 , saving, errorRate, wpm, timeString);
         fileWriter.close();
     }
