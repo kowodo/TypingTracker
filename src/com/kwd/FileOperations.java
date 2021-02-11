@@ -16,6 +16,7 @@ public class FileOperations {
         int numberOfRecords = 0;
         int numberOfRecordsLast7Days = 0;
         String line;
+        LocalDateTime now = LocalDateTime.now();
         while (null != (line = bufferedReader.readLine())) {
             numberOfRecords++;
             String[] split = line.split(";");
@@ -24,7 +25,6 @@ public class FileOperations {
             sumErrorRate += tmpErrorRate;
             sumWPM += tmpWPM;
             // calculating avg for last 7 days
-            LocalDateTime now = LocalDateTime.now();
             LocalDateTime parsedDate = LocalDateTime.from(TT.dateTimeFormatter.parse(split[2]));
             if (parsedDate.isAfter(now.minusDays(7))) {
                 numberOfRecordsLast7Days++;
@@ -37,7 +37,7 @@ public class FileOperations {
                 TT.bestWPM = tmpWPM;
                 TT.bestTimeString = split[2];
             }
-            if (tmpErrorRate == TT.bestErrorRate && tmpWPM < TT.bestWPM) {
+            if (tmpErrorRate == TT.bestErrorRate && tmpWPM > TT.bestWPM) {
                 TT.bestWPM = tmpWPM;
                 TT.bestTimeString = split[2];
             }

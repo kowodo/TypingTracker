@@ -28,14 +28,13 @@ public class TT {
             FileOperations.parseRecordsFile(recordsFile);
             FileOperations.writeRecordToFile(currentErrorRate, currentWPM, recordsFile, dateTimeFormatter);
             Print.printStatistics();
-            evaluateCurrentAtempt();
+            evaluateCurrentAttempt();
         } else if (args.length >= 3) {
             System.err.println("3 or more input parameters not yet supported");
         }
     }
 
-    private static void evaluateCurrentAtempt() {
-        // test
+    private static void evaluateCurrentAttempt() {
         if (currentErrorRate > averageErrorRateAllTime) {
             Print.printEncouragement();
         }
