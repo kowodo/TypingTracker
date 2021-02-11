@@ -39,17 +39,17 @@ public class TT {
             Print.printEncouragement();
         }
         if (currentErrorRate < averageErrorRateAllTime ||
-                currentErrorRate == averageErrorRateAllTime && currentWPM < averageWPMAllTime) {
+                currentErrorRate == averageErrorRateAllTime && currentWPM > averageWPMAllTime) {
             Print.printAboveAverageAllTime();
         }
         if (currentErrorRate < averageErrorRateLast7Days ||
-                currentErrorRate == averageErrorRateLast7Days && currentWPM < averageWPMLast7Days) {
+                currentErrorRate == averageErrorRateLast7Days && currentWPM > averageWPMLast7Days) {
             Print.printAboveAveragePast7Days();
         }
         if (currentErrorRate == bestErrorRate && currentWPM == bestWPM) {
             Print.printTiedPersonalBest();
         }
-        if (currentErrorRate < bestErrorRate || currentErrorRate == bestErrorRate && currentWPM < bestWPM) {
+        if (currentErrorRate < bestErrorRate || currentErrorRate == bestErrorRate && currentWPM > bestWPM) {
             Print.printNewPersonalBest();
         }
     }
