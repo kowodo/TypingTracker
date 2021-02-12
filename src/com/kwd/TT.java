@@ -10,8 +10,10 @@ public class TT {
     static float bestWPM = Float.MAX_VALUE;
     static String bestTimeString = "If you can read this.... you are too close to error. Hint: This should not happen";
     static float averageErrorRateAllTime = -1f;
+    static float averageErrorRateLast3Days = -1f;
     static float averageErrorRateLast7Days = -1f;
     static float averageWPMAllTime = -1;
+    static float averageWPMLast3Days = -1;
     static float averageWPMLast7Days = -1;
     static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy>MM>dd>HH:mm:ss");
 
@@ -45,6 +47,10 @@ public class TT {
         if (currentErrorRate < averageErrorRateLast7Days ||
                 currentErrorRate == averageErrorRateLast7Days && currentWPM > averageWPMLast7Days) {
             Print.printAboveAveragePast7Days();
+        }
+        if (currentErrorRate < averageErrorRateLast3Days ||
+                currentErrorRate == averageErrorRateLast3Days && currentWPM > averageWPMLast3Days) {
+            Print.printAboveAveragePast3Days();
         }
         if (currentErrorRate == bestErrorRate && currentWPM == bestWPM) {
             Print.printTiedPersonalBest();

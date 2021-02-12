@@ -5,16 +5,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class FileOperations {
+    private static float tmpErrorRate;
+    private static float sumErrorRate = 0;
+    private static float sumErrorRateLast3Days = 0;
+    private static float sumErrorRateLast7Days = 0;
+    private static float tmpWPM;
+    private static float sumWPM = 0;
+    private static float sumWPMLast3Days = 0;
+    private static float sumWPMLast7Days = 0;
+    private static int numberOfRecords = 0;
+    private static int numberOfRecordsLast3Days = 0;
+    private static int numberOfRecordsLast7Days = 0;
+
     static void parseRecordsFile(File recordsFile) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(recordsFile));
-        float tmpErrorRate;
-        float sumErrorRate = 0;
-        float sumErrorRateLast7Days = 0;
-        float tmpWPM;
-        float sumWPM = 0;
-        float sumWPMLast7Days = 0;
-        int numberOfRecords = 0;
-        int numberOfRecordsLast7Days = 0;
         String line;
         LocalDateTime now = LocalDateTime.now();
         while (null != (line = bufferedReader.readLine())) {
@@ -31,6 +35,12 @@ public class FileOperations {
                 sumErrorRateLast7Days += tmpErrorRate;
                 sumWPMLast7Days += tmpWPM;
             }
+            // calculating avg for last 3 days
+            if (parsedDate.isAfter(now.minusDays(3))) {
+                numberOfRecordsLast3Days++;
+                sumErrorRateLast3Days += tmpErrorRate;
+                sumWPMLast3Days += tmpWPM;
+            }
             // finding best result
             if (tmpErrorRate < TT.bestErrorRate) {
                 TT.bestErrorRate = tmpErrorRate;
@@ -44,8 +54,12 @@ public class FileOperations {
         }
         TT.averageErrorRateAllTime = sumErrorRate / numberOfRecords;
         TT.averageWPMAllTime = sumWPM / numberOfRecords;
+
         TT.averageErrorRateLast7Days = sumErrorRateLast7Days / numberOfRecordsLast7Days;
         TT.averageWPMLast7Days = sumWPMLast7Days / numberOfRecordsLast7Days;
+
+        TT.averageErrorRateLast3Days = sumErrorRateLast3Days / numberOfRecordsLast3Days;
+        TT.averageWPMLast3Days = sumWPMLast3Days / numberOfRecordsLast3Days;
         bufferedReader.close();
     }
 
