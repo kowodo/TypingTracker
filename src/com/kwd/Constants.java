@@ -25,6 +25,7 @@ public class Constants {
     static final int WPM_DIGITS = 7;
     // keywords
     static final String ALL_TIME = "all time";
+    static final String FIRST_7_DAYS = "first 7 days";
     static final String LAST_7_DAYS = "last 7 days";
     static final String LAST_3_DAYS = "last 3 days";
 }

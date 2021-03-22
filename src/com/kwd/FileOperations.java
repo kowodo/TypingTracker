@@ -10,13 +10,16 @@ import static com.kwd.Constants.*;
 public class FileOperations {
     private static float tmpErrorRate;
     private static float sumErrorRate = 0;
+    private static float sumErrorRateFirst7Days = 0;
     private static float sumErrorRateLast3Days = 0;
     private static float sumErrorRateLast7Days = 0;
     private static float tmpWPM;
     private static float sumWPM = 0;
+    private static float sumWPMFirst7Days = 0;
     private static float sumWPMLast3Days = 0;
     private static float sumWPMLast7Days = 0;
     private static int numberOfRecords = 0;
+    private static int numberOfRecordsFirst7Days = 0;
     private static int numberOfRecordsLast3Days = 0;
     private static int numberOfRecordsLast7Days = 0;
 
@@ -24,6 +27,7 @@ public class FileOperations {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(recordsFile));
         String line;
         LocalDateTime now = LocalDateTime.now();
+        LocalDateTime firstEntryDateTime = null;
         while (null != (line = bufferedReader.readLine())) {
             numberOfRecords++;
             String[] split = line.split(";");
@@ -31,8 +35,17 @@ public class FileOperations {
             tmpWPM = Float.parseFloat(split[1]);
             sumErrorRate += tmpErrorRate;
             sumWPM += tmpWPM;
-            // calculating avg for last 7 days
+            // calculating avg for first 7 days
             LocalDateTime parsedDate = LocalDateTime.from(TT.dateTimeFormatter.parse(split[2]));
+            if (null == firstEntryDateTime) {
+                firstEntryDateTime = parsedDate;
+            }
+            if (parsedDate.isBefore(firstEntryDateTime.plusDays(7))) {
+                numberOfRecordsFirst7Days++;
+                sumErrorRateFirst7Days += tmpErrorRate;
+                sumWPMFirst7Days += tmpWPM;
+            }
+            // calculating avg for last 7 days
             if (parsedDate.isAfter(now.minusDays(7))) {
                 numberOfRecordsLast7Days++;
                 sumErrorRateLast7Days += tmpErrorRate;
@@ -55,29 +68,29 @@ public class FileOperations {
                 TT.bestTimeString = split[2];
             }
         }
-        TT.averageErrorRateAllTime = sumErrorRate / numberOfRecords;
-        TT.averageWPMAllTime = sumWPM / numberOfRecords;
+
         mapToPopulate.put(ALL_TIME,
                 new Statistic(ALL_TIME,
                         sumErrorRate / numberOfRecords,
                         sumWPM / numberOfRecords
                 ));
 
-        TT.averageErrorRateLast7Days = sumErrorRateLast7Days / numberOfRecordsLast7Days;
-        TT.averageWPMLast7Days = sumWPMLast7Days / numberOfRecordsLast7Days;
+        mapToPopulate.put(FIRST_7_DAYS,
+                new Statistic(FIRST_7_DAYS,
+                        sumErrorRateFirst7Days / numberOfRecordsFirst7Days,
+                        sumWPMFirst7Days / numberOfRecordsFirst7Days));
+
         mapToPopulate.put(LAST_7_DAYS,
                 new Statistic(LAST_7_DAYS,
                         sumErrorRateLast7Days / numberOfRecordsLast7Days,
                         sumWPMLast7Days / numberOfRecordsLast7Days)
         );
 
-        TT.averageErrorRateLast3Days = sumErrorRateLast3Days / numberOfRecordsLast3Days;
-        TT.averageWPMLast3Days = sumWPMLast3Days / numberOfRecordsLast3Days;
         mapToPopulate.put(LAST_3_DAYS,
                 new Statistic(LAST_3_DAYS,
                         sumErrorRateLast3Days / numberOfRecordsLast3Days,
                         sumWPMLast3Days / numberOfRecordsLast3Days
-                        ));
+                ));
         bufferedReader.close();
     }
 

@@ -37,6 +37,7 @@ public class Print {
     }
 
     static void printMapStatistics(HashMap<String, Statistic> map) {
+        printStatistic(map.get(FIRST_7_DAYS));
         printStatistic(map.get(ALL_TIME));
         printStatistic(map.get(LAST_7_DAYS));
         printStatistic(map.get(LAST_3_DAYS));
