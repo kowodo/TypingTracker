@@ -23,4 +23,8 @@ public class Constants {
     static final int CATEGORY_STRING_MAX_LENGTH = -20;
     static final int ERROR_RATE_DIGITS = 6;
     static final int WPM_DIGITS = 7;
+    // keywords
+    static final String ALL_TIME = "all time";
+    static final String LAST_7_DAYS = "last 7 days";
+    static final String LAST_3_DAYS = "last 3 days";
 }

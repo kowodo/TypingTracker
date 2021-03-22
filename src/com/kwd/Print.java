@@ -1,5 +1,9 @@
 package com.kwd;
 
+import java.util.HashMap;
+
+import static com.kwd.Constants.*;
+
 public class Print {
     static void printAboveAverageAllTime() {
         System.out.println(Constants.ANSI_GREEN + "Better than all time average!" + Constants.ANSI_RESET);
@@ -32,6 +36,19 @@ public class Print {
         printBest();
     }
 
+    static void printMapStatistics(HashMap<String, Statistic> map) {
+        printStatistic(map.get(ALL_TIME));
+        printStatistic(map.get(LAST_7_DAYS));
+        printStatistic(map.get(LAST_3_DAYS));
+    }
+
+    static private void printStatistic(Statistic statistic) {
+        System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%"
+                        + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
+                , statistic.getName(), statistic.getErrorRate(), statistic.getWPM());
+    }
+
+
     static void printAverage() {
         String average = "Average";
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
@@ -49,6 +66,7 @@ public class Print {
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
                 , average7days, TT.averageErrorRateLast7Days, TT.averageWPMLast7Days);
     }
+
     static void printAverageLast3Days() {
         String average3days = "Average last 3 days";
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"

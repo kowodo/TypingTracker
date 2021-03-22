@@ -3,6 +3,9 @@ package com.kwd;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+
+import static com.kwd.Constants.*;
 
 public class FileOperations {
     private static float tmpErrorRate;
@@ -17,7 +20,7 @@ public class FileOperations {
     private static int numberOfRecordsLast3Days = 0;
     private static int numberOfRecordsLast7Days = 0;
 
-    static void parseRecordsFile(File recordsFile) throws IOException {
+    static void parseRecordsFile(File recordsFile, HashMap<String, Statistic> mapToPopulate) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(recordsFile));
         String line;
         LocalDateTime now = LocalDateTime.now();
@@ -54,12 +57,27 @@ public class FileOperations {
         }
         TT.averageErrorRateAllTime = sumErrorRate / numberOfRecords;
         TT.averageWPMAllTime = sumWPM / numberOfRecords;
+        mapToPopulate.put(ALL_TIME,
+                new Statistic(ALL_TIME,
+                        sumErrorRate / numberOfRecords,
+                        sumWPM / numberOfRecords
+                ));
 
         TT.averageErrorRateLast7Days = sumErrorRateLast7Days / numberOfRecordsLast7Days;
         TT.averageWPMLast7Days = sumWPMLast7Days / numberOfRecordsLast7Days;
+        mapToPopulate.put(LAST_7_DAYS,
+                new Statistic(LAST_7_DAYS,
+                        sumErrorRateLast7Days / numberOfRecordsLast7Days,
+                        sumWPMLast7Days / numberOfRecordsLast7Days)
+        );
 
         TT.averageErrorRateLast3Days = sumErrorRateLast3Days / numberOfRecordsLast3Days;
         TT.averageWPMLast3Days = sumWPMLast3Days / numberOfRecordsLast3Days;
+        mapToPopulate.put(LAST_3_DAYS,
+                new Statistic(LAST_3_DAYS,
+                        sumErrorRateLast3Days / numberOfRecordsLast3Days,
+                        sumWPMLast3Days / numberOfRecordsLast3Days
+                        ));
         bufferedReader.close();
     }
 
