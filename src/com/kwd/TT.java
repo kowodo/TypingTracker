@@ -24,20 +24,23 @@ public class TT {
         File recordsFile = FileOperations.getRecordFile();
 
         if (args.length < 2) {
-            System.out.println("To add record provide parameters: \n  error Rate (float), wpm (float), date yyyy>MM>dd>HH:mm:ss [optional]");
+            System.out.println("To add record provide parameters: \n  error Rate (float), wpm (float), date yyyy>MM>dd>HH:mm:ss [optional]\n");
             FileOperations.parseRecordsFile(recordsFile, statisticAfterSavingMap);
             Print.printMapStatistics(statisticAfterSavingMap);
+            System.out.println();
             Print.printBest();
         } else if (args.length == 2) {
             currentErrorRate = Float.parseFloat(args[0]);
             currentWPM = Float.parseFloat(args[1]);
             FileOperations.parseRecordsFile(recordsFile, statisticBeforeSavingMap);
-            System.out.println("before saving");
+            System.out.println("before saving new record");
             Print.printMapStatistics(statisticBeforeSavingMap);
+            System.out.println();
             FileOperations.writeRecordToFile(currentErrorRate, currentWPM, recordsFile, dateTimeFormatter);
             FileOperations.parseRecordsFile(recordsFile, statisticAfterSavingMap);
             Print.printMapStatistics(statisticAfterSavingMap);
             Print.printBest();
+            System.out.println();
             evaluateCurrentAttempt();
         } else if (args.length >= 3) {
             System.err.println("3 or more input parameters not yet supported");
