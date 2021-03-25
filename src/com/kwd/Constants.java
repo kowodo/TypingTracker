@@ -1,5 +1,7 @@
 package com.kwd;
 
+import java.time.format.DateTimeFormatter;
+
 public class Constants {
     // Color constants
     public static final String ANSI_RESET = "\u001B[0m";
@@ -25,9 +27,13 @@ public class Constants {
     static final int WPM_DIGITS = 7;
     // keywords
     static final String ALL_TIME = "all time";
+    static final String BEST = "best";
     static final String FIRST_7_DAYS = "first 7 days";
     static final String LAST_7_DAYS = "last 7 days";
     static final String LAST_3_DAYS = "last 3 days";
+
+    static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy>MM>dd>HH:mm:ss");
+    static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy>MM>dd");
 
     private Constants(){};
 }

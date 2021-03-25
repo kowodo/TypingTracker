@@ -1,6 +1,7 @@
 package com.kwd;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.kwd.Constants.*;
 
@@ -42,14 +43,16 @@ public class Print {
 
     private static void printStatistic(Statistic statistic) {
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%"
-                        + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm\n"
-                , statistic.getName(), statistic.getErrorRate(), statistic.getWpm());
+                        + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm  %s --> %s\n"
+                , statistic.getName(), statistic.getErrorRate(), statistic.getWpm(),
+                dateFormatter.format(statistic.getStartDate()), dateTimeFormatter.format(statistic.getEndDate())
+        );
     }
 
-    static void printBest() {
+    static void printBest(Map<String, Statistic> map) {
         String personalBest = "Personal best";
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%" + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm  %s\n"
-                , personalBest, TT.errorRateBest, TT.wpmBest, TT.bestTimeString);
+                , personalBest, map.get(BEST).getErrorRate(), map.get(BEST).getWpm(), dateTimeFormatter.format(map.get(BEST).getStartDate()));
     }
 
 }

@@ -2,7 +2,6 @@ package com.kwd;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import static com.kwd.Constants.*;
@@ -22,6 +21,17 @@ public class FileOperations {
     private static int numberOfRecordsFirst7Days = 0;
     private static int numberOfRecordsLast3Days = 0;
     private static int numberOfRecordsLast7Days = 0;
+    private static LocalDateTime startDateAllTime;
+    private static LocalDateTime startDateFirst7Days;
+    private static LocalDateTime startDateLast3Days;
+    private static LocalDateTime startDateLast7Days;
+    private static LocalDateTime endDateAllTime;
+    private static LocalDateTime endDateFirst7Days;
+    private static LocalDateTime endDateLast3Days;
+    private static LocalDateTime endDateLast7Days;
+
+    private static float errorRateBest = Float.MAX_VALUE;
+    private static float wpmBest = Float.MIN_VALUE;
 
     private FileOperations() {
     }
@@ -39,9 +49,18 @@ public class FileOperations {
                 sumErrorRate += tmpErrorRate;
                 sumWPM += tmpWPM;
                 // calculating avg for first 7 days
-                LocalDateTime parsedDate = LocalDateTime.from(TT.dateTimeFormatter.parse(split[2]));
+                LocalDateTime parsedDate = LocalDateTime.from(dateTimeFormatter.parse(split[2]));
                 if (null == firstEntryDateTime) {
                     firstEntryDateTime = parsedDate;
+                    startDateAllTime = firstEntryDateTime;
+                    endDateAllTime = now;
+                    startDateFirst7Days = firstEntryDateTime;
+                    endDateFirst7Days = startDateFirst7Days.plusDays(7);
+                    startDateLast3Days = now.minusDays(3);
+                    endDateLast3Days = now;
+                    startDateLast7Days = now.minusDays(7);
+                    endDateLast7Days = now;
+
                 }
                 if (parsedDate.isBefore(firstEntryDateTime.plusDays(7))) {
                     numberOfRecordsFirst7Days++;
@@ -61,43 +80,44 @@ public class FileOperations {
                     sumWPMLast3Days += tmpWPM;
                 }
                 // finding best result
-                if (tmpErrorRate < TT.errorRateBest) {
-                    TT.errorRateBest = tmpErrorRate;
-                    TT.wpmBest = tmpWPM;
-                    TT.bestTimeString = split[2];
+                if (tmpErrorRate < errorRateBest) {
+                    errorRateBest = tmpErrorRate;
+                    wpmBest = tmpWPM;
                 }
-                if (tmpErrorRate == TT.errorRateBest && tmpWPM > TT.wpmBest) {
-                    TT.wpmBest = tmpWPM;
-                    TT.bestTimeString = split[2];
+                if (tmpErrorRate == errorRateBest && tmpWPM > wpmBest) {
+                    wpmBest = tmpWPM;
                 }
             }
+
+            mapToPopulate.put(BEST, new Statistic(BEST, errorRateBest, wpmBest, now, now));
 
             mapToPopulate.put(ALL_TIME,
                     new Statistic(ALL_TIME,
                             sumErrorRate / numberOfRecords,
-                            sumWPM / numberOfRecords
+                            sumWPM / numberOfRecords, startDateAllTime, endDateAllTime
                     ));
 
             mapToPopulate.put(FIRST_7_DAYS,
                     new Statistic(FIRST_7_DAYS,
                             sumErrorRateFirst7Days / numberOfRecordsFirst7Days,
-                            sumWPMFirst7Days / numberOfRecordsFirst7Days));
+                            sumWPMFirst7Days / numberOfRecordsFirst7Days, startDateFirst7Days, endDateFirst7Days
+                    ));
 
             mapToPopulate.put(LAST_7_DAYS,
                     new Statistic(LAST_7_DAYS,
                             sumErrorRateLast7Days / numberOfRecordsLast7Days,
-                            sumWPMLast7Days / numberOfRecordsLast7Days)
-            );
+                            sumWPMLast7Days / numberOfRecordsLast7Days, startDateLast7Days, endDateLast7Days
+                    ));
 
             mapToPopulate.put(LAST_3_DAYS,
                     new Statistic(LAST_3_DAYS,
                             sumErrorRateLast3Days / numberOfRecordsLast3Days,
-                            sumWPMLast3Days / numberOfRecordsLast3Days
+                            sumWPMLast3Days / numberOfRecordsLast3Days, startDateLast3Days, endDateLast3Days
                     ));
         }
     }
 
-    static void writeRecordToFile(float errorRate, float wpm, File recordsFile, DateTimeFormatter dateTimeFormatter) throws IOException {
+    static void writeRecordToFile(float errorRate, float wpm, File recordsFile) throws IOException {
         LocalDateTime localDateTime = LocalDateTime.now();
         String timeString;
         timeString = dateTimeFormatter.format(localDateTime);
