@@ -3,11 +3,11 @@ package com.kwd;
 public class Statistic {
     private String name;
     private float errorRate;
-    private float WPM;
+    private float wpm;
 
-    public Statistic(String name, float errorRate, float WPM) {
+    public Statistic(String name, float errorRate, float wpm) {
         this.name = name;
-        this.WPM = WPM;
+        this.wpm = wpm;
         this.errorRate = errorRate;
     }
 
@@ -15,8 +15,8 @@ public class Statistic {
         return name;
     }
 
-    public float getWPM() {
-        return WPM;
+    public float getWpm() {
+        return wpm;
     }
 
     public float getErrorRate() {
