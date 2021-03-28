@@ -1,0 +1,13 @@
+plugins {
+    id 'application'
+}
+
+mainClassName = 'com.kwd.TT'
+
+jar {
+    manifest {
+        attributes (
+            'Main-Class': mainClassName
+        )
+    }
+}
