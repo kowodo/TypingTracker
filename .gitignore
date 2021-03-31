@@ -1,2 +1,9 @@
 ### Project
 typing records.csv
+
+### Maven
+target/
+
+### Intellij
+.idea/
+*.iml
