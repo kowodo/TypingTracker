@@ -41,6 +41,28 @@ public class Print {
         printStatistic(map.get(LAST_3_DAYS));
     }
 
+    static void printMapStatisticsComparison(HashMap<String, Statistic> before, HashMap<String, Statistic> after) {
+        printStatisticComparison(before.get(FIRST_7_DAYS), after.get(FIRST_7_DAYS));
+        printStatisticComparison(before.get(ALL_TIME), after.get(ALL_TIME));
+        printStatisticComparison(before.get(LAST_7_DAYS), after.get(LAST_7_DAYS));
+        printStatisticComparison(before.get(LAST_3_DAYS), after.get(LAST_3_DAYS));
+
+    }
+
+    private static void printStatisticComparison(Statistic before, Statistic after) {
+        Float errorDelta = after.getErrorRate() - before.getErrorRate();
+        Float wpmDelta = after.getWpm() - before.getWpm();
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"
+                        + ERROR_RATE_DIGITS + ".2f(%"
+                        + (ERROR_RATE_DIGITS - 1) + ".2f)%%   "
+                        + "%" + WPM_DIGITS + ".2f("
+                        + "%" + (WPM_DIGITS - 2) + ".2f)wpm"
+                        + "  %s --> %s\n"
+                , after.getName(), after.getErrorRate(), errorDelta, after.getWpm(), wpmDelta,
+                dateFormatter.format(after.getStartDate()), dateTimeFormatter.format(after.getEndDate())
+        );
+    }
+
     private static void printStatistic(Statistic statistic) {
         System.out.printf("%" + Constants.CATEGORY_STRING_MAX_LENGTH + "s:%"
                         + Constants.ERROR_RATE_DIGITS + ".2f%% %" + Constants.WPM_DIGITS + ".2fwpm  %s --> %s\n"

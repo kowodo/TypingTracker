@@ -21,16 +21,15 @@ public class TT {
             System.out.println();
             Print.printBest(statisticBeforeSavingMap);
         } else if (args.length == 2) {
+            System.out.println();
             errorRateCurrent = Float.parseFloat(args[0]);
             wpmCurrent = Float.parseFloat(args[1]);
             FileOperations.parseRecordsFile(recordsFile, statisticBeforeSavingMap);
-            System.out.println("before saving new record");
-            Print.printMapStatistics(statisticBeforeSavingMap);
-            Print.printBest(statisticBeforeSavingMap);
-            System.out.println();
-            FileOperations.writeRecordToFile(errorRateCurrent, wpmCurrent, recordsFile );
+            FileOperations.writeRecordToFile(errorRateCurrent, wpmCurrent, recordsFile);
             FileOperations.parseRecordsFile(recordsFile, statisticAfterSavingMap);
-            Print.printMapStatistics(statisticAfterSavingMap);
+            System.out.println();
+            Print.printMapStatisticsComparison(statisticBeforeSavingMap, statisticAfterSavingMap);
+            System.out.println();
             Print.printBest(statisticAfterSavingMap);
             System.out.println();
             evaluateCurrentAttempt(statisticBeforeSavingMap, statisticAfterSavingMap);
@@ -65,7 +64,7 @@ public class TT {
             Print.printAboveAveragePast3Days();
         }
         if (before.get(BEST).getErrorRate() == errorRateCurrent
-                && before.get(BEST).getWpm() == wpmCurrent){
+                && before.get(BEST).getWpm() == wpmCurrent) {
             Print.printTiedPersonalBest();
         }
         if (before.get(BEST).getErrorRate() > errorRateCurrent
