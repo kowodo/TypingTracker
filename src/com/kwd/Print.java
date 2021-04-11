@@ -51,14 +51,32 @@ public class Print {
 
     private static void printStatisticComparison(Statistic before, Statistic after) {
         Float errorDelta = after.getErrorRate() - before.getErrorRate();
+        String errorDeltaColor = ANSI_RESET;
+        if (errorDelta < 0) {
+            errorDeltaColor = ANSI_GREEN;
+        }
+        if (errorDelta > 0) {
+            errorDeltaColor = ANSI_RED;
+        }
         Float wpmDelta = after.getWpm() - before.getWpm();
-        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:%"
-                        + ERROR_RATE_DIGITS + ".2f(%"
-                        + (ERROR_RATE_DIGITS - 1) + ".2f)%%   "
-                        + "%" + WPM_DIGITS + ".2f("
-                        + "%" + (WPM_DIGITS - 2) + ".2f)wpm"
+        String wpmDeltaColor = ANSI_RESET;
+        if (wpmDelta > 0) {
+            wpmDeltaColor = ANSI_GREEN;
+        }
+        if (wpmDelta < 0) {
+            wpmDeltaColor = ANSI_RED;
+        }
+        System.out.printf("%" + CATEGORY_STRING_MAX_LENGTH + "s:"
+                        + "%" + ERROR_RATE_DIGITS + ".2f"
+                        + "(%s %+" + (ERROR_RATE_DIGITS - 1) + ".2f%s)%%   "
+                        + "%" + WPM_DIGITS + ".2f"
+                        + "(%s%+" + (WPM_DIGITS - 2) + ".2f%s)wpm"
                         + "  %s --> %s\n"
-                , after.getName(), after.getErrorRate(), errorDelta, after.getWpm(), wpmDelta,
+                , after.getName(),
+                after.getErrorRate(),
+                errorDeltaColor, errorDelta, ANSI_RESET,
+                after.getWpm(),
+                wpmDeltaColor, wpmDelta, ANSI_RESET,
                 dateFormatter.format(after.getStartDate()), dateTimeFormatter.format(after.getEndDate())
         );
     }
