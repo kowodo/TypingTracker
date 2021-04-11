@@ -1,0 +1,10 @@
+### Project
+typing records.csv
+
+### Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+### Intellij
+.idea/
+*.iml
