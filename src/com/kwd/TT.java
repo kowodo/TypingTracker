@@ -40,29 +40,18 @@ public class TT {
 
     private static void evaluateCurrentAttempt(HashMap<String, Statistic> before, HashMap<String, Statistic> after) {
         float errorRateAllTime = after.get(ALL_TIME).getErrorRate();
-        if (errorRateCurrent > errorRateAllTime) {
+        final float errorRateFirst7Days = after.get(FIRST_7_DAYS).getErrorRate();
+        if (errorRateCurrent > errorRateAllTime
+                && errorRateCurrent > errorRateFirst7Days
+                && errorRateCurrent > after.get(LAST_7_DAYS).getErrorRate()
+                && errorRateCurrent > after.get(LAST_3_DAYS).getErrorRate()) {
             Print.printEncouragement();
         }
-        float wpmAllTime = after.get(ALL_TIME).getWpm();
-        if (errorRateCurrent < errorRateAllTime ||
-                errorRateCurrent == errorRateAllTime
-                        && wpmCurrent > wpmAllTime) {
-            Print.printAboveAverageAllTime();
+        if (errorRateCurrent < errorRateFirst7Days
+                || errorRateCurrent == errorRateFirst7Days && wpmCurrent > after.get(FIRST_7_DAYS).getWpm()){
+           Print.printBetterThanFirst7Days();
         }
-        float errorRateLast7Days = after.get(LAST_7_DAYS).getErrorRate();
-        float wpmLast7Days = after.get(LAST_7_DAYS).getWpm();
-        if (errorRateCurrent < errorRateLast7Days ||
-                errorRateCurrent == errorRateLast7Days
-                        && wpmCurrent > wpmLast7Days) {
-            Print.printAboveAveragePast7Days();
-        }
-        float errorRateLast3Days = after.get(LAST_3_DAYS).getErrorRate();
-        float wpmLast3Days = after.get(LAST_3_DAYS).getWpm();
-        if (errorRateCurrent < errorRateLast3Days ||
-                errorRateCurrent == errorRateLast3Days
-                        && wpmCurrent > wpmLast3Days) {
-            Print.printAboveAveragePast3Days();
-        }
+
         if (before.get(BEST).getErrorRate() == errorRateCurrent
                 && before.get(BEST).getWpm() == wpmCurrent) {
             Print.printTiedPersonalBest();

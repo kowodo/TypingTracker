@@ -11,27 +11,31 @@ public class Print {
     }
 
     static void printAboveAverageAllTime() {
-        System.out.println(Constants.ANSI_GREEN + "Better than all time average!" + Constants.ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Better than all time average!" + ANSI_RESET);
     }
 
     static void printAboveAveragePast7Days() {
-        System.out.println(Constants.ANSI_GREEN + "Better than average for last 7 days! " + Constants.ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Better than average for last 7 days! " + ANSI_RESET);
     }
 
     static void printAboveAveragePast3Days() {
-        System.out.println(Constants.ANSI_GREEN + "Better than average for last 3 days! " + Constants.ANSI_RESET);
+        System.out.println(ANSI_GREEN + "Better than average for last 3 days! " + ANSI_RESET);
     }
 
     static void printTiedPersonalBest() {
-        System.out.println(Constants.ANSI_CYAN + "You have TIED your personal best!!!" + Constants.ANSI_RESET);
+        System.out.println(ANSI_CYAN + "You have TIED your personal best!!!" + ANSI_RESET);
     }
 
     static void printNewPersonalBest() {
-        System.out.println(Constants.ANSI_CYAN + ">>>> New personal best! Celebration time! <<<<" + Constants.ANSI_RESET);
+        System.out.println(ANSI_CYAN + ">>>> New personal best! Celebration time! <<<<" + ANSI_RESET);
     }
 
     static void printEncouragement() {
         System.out.println("Stick with it and you will get better!");
+    }
+
+    static void printBetterThanFirst7Days() {
+        System.out.println(ANSI_GREEN + "Better than first 7 days average." + ANSI_RESET);
     }
 
     static void printMapStatistics(HashMap<String, Statistic> map) {
@@ -46,7 +50,6 @@ public class Print {
         printStatisticComparison(before.get(ALL_TIME), after.get(ALL_TIME));
         printStatisticComparison(before.get(LAST_7_DAYS), after.get(LAST_7_DAYS));
         printStatisticComparison(before.get(LAST_3_DAYS), after.get(LAST_3_DAYS));
-
     }
 
     private static void printStatisticComparison(Statistic before, Statistic after) {
